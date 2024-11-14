@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-springboot-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-springboot-app
+  template:
+    metadata:
+      labels:
+        app: sample-springboot-app
+    spec:
+      containers:
+        - name: sample-springboot-app
+          image: sravya725/sample-springboot-app
+          ports:
+            - containerPort: 9090
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "default"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-springboot-app-service
+spec:
+  selector:
+    app: sample-springboot-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 9090
+  type: NodePort
+
